@@ -1,5 +1,6 @@
-import pygame
-import sys
+
+import pygame, sys
+
 
 class TrafficLight:
     def __init__(self, x, y, color):
@@ -37,7 +38,9 @@ class Obstacle:
         # Draw the obstacle on the screen
         pygame.draw.rect(screen, (0, 0, 0), (self.x, self.y, self.width, self.height))
 
+
 pygame.init()
+
 screen = pygame.display.set_mode((800, 600))
 pygame.display.set_caption("Traffic Simulation")
 
@@ -51,7 +54,6 @@ vehicles.append(Vehicle(0, 151, 0.25, 0.25, (255, 0, 0)))
 vehicles.append(Vehicle(0, 168, 0.3, 0.3, (0, 255, 0)))
 vehicles.append(Vehicle(0, 185, 0.2, 0.2, (0, 0, 255)))
 
-traffic_light_2 = TrafficLight(500, 1000, "green")
 traffic_light = TrafficLight(500, 100, "green")
 
 obstacles = []
@@ -60,13 +62,9 @@ obstacles = []
 obstacles.append(Obstacle(0, 80, 1000, 50))
 obstacles.append(Obstacle(0, 200, 1000, 1000))
 
+running = True
 
-while True:
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            pygame.quit()
-            sys.exit()
-
+while running:      
     # Draw the obstacles on the screen
     screen.fill((255, 255, 255))
     for obstacle in obstacles:
@@ -81,11 +79,11 @@ while True:
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
-                pygame.quit()
-                sys.exit()
+                running = False
+            
         elif event.type == pygame.KEYDOWN:
             if event.key == pygame.K_SPACE:
-                    # If the spacebar is pressed, toggle the traffic light's color
+                # If the spacebar is pressed, toggle the traffic light's color
                 if traffic_light.color == "red":
                         traffic_light.color = "green"
                 elif traffic_light.color == "green":
@@ -105,18 +103,11 @@ while True:
                 vehicle.speed = 0
             else: 
                 vehicle.speed = vehicle.prevSpeed
-        if traffic_light.color == "yellow":
-            if vehicle.x < traffic_light.x:
-                vehicle.speed = 0.03
-            else:
-                vehicle.speed = vehicle.prevSpeed
-        if traffic_light.color == "green":
+        else:
             vehicle.speed = vehicle.prevSpeed
 
     # Draw the vehicles on the screen
-    screen.fill((255, 255, 255))
     traffic_light.draw(screen)
-    traffic_light_2.draw(screen)
     for vehicle in vehicles:
         vehicle_surface = pygame.Surface((20, 10))
         vehicle_surface.fill(vehicle.color)
@@ -124,3 +115,9 @@ while True:
 
 
     pygame.display.update()
+
+
+
+
+pygame.quit()
+sys.exit()
