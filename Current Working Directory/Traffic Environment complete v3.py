@@ -93,6 +93,7 @@ class Car:
         self.state = "Running"
         self.turn_inbound = False
         self.turn_direction = ''
+        self.current_dir = ''
         self.start_dist = False
         self.turn_dist = 0
         self.waiting_time = 0
@@ -113,7 +114,7 @@ class Car:
         next_change_distance = random.randint(min_change_dist, max_change_dist)
         self.speed_checkpoint = self.dist_travelled + next_change_distance
         if not init:
-            speed_choice = [0.5, 0.75, 1, 1.25, 1.5]
+            speed_choice = [0.75, 1, 1.25, 1.5]
             if self.x_vel != 0:
                 self.x_vel *= random.choice(speed_choice)
             elif self.y_vel != 0:
@@ -122,6 +123,22 @@ class Car:
     def get_center(self):
         return (self.x + self.length/2, self.y + self.breadth/2)
     
+    def turn_dist_calc(self):
+        smaller_dist = ROAD_WIDTH/2
+        bigger_dist = ROAD_WIDTH
+        cur = self.current_dir
+        dir = self.turn_direction
+        turn_dict = {
+            ('L','U'): bigger_dist,
+            ('L','D'): smaller_dist,
+            ('R','D'): bigger_dist,
+            ('R','U'): smaller_dist,
+            ('U','L'): smaller_dist,
+            ('U','R'): bigger_dist,
+            ('D','R'): smaller_dist,
+            ('D','L'): bigger_dist,
+        }
+        return turn_dict[(cur,dir)]
 
     def update_pos(self):
         stop = self.check_signal_cross()
@@ -130,9 +147,10 @@ class Car:
                 self.turn_dist = 0
                 self.start_dist = False
             dir = self.turn_direction
-
+            intersect_dist = self.turn_dist_calc()
+            
             if dir == "U":
-                if self.turn_dist < ROAD_WIDTH/2 and self.turn_dist+(abs(self.x_vel)+abs(self.y_vel)) > ROAD_WIDTH/2:
+                if self.turn_dist < intersect_dist and self.turn_dist+(abs(self.x_vel)+abs(self.y_vel)) > intersect_dist:
                     self.y_vel = -abs(self.x_vel)
                     self.x_vel = 0
                     self.turn_inbound = False
@@ -141,7 +159,7 @@ class Car:
                     self.go_forward()
 
             elif dir == "L":
-                if self.turn_dist < ROAD_WIDTH/2 and self.turn_dist+(abs(self.x_vel)+abs(self.y_vel)) > ROAD_WIDTH/2:
+                if self.turn_dist < intersect_dist and self.turn_dist+(abs(self.x_vel)+abs(self.y_vel)) > intersect_dist:
                     self.x_vel = -abs(self.y_vel)
                     self.y_vel = 0
                     self.turn_inbound = False
@@ -150,7 +168,7 @@ class Car:
                     self.go_forward()
 
             elif dir == "D":
-                if self.turn_dist < ROAD_WIDTH and self.turn_dist+(abs(self.x_vel)+abs(self.y_vel)) > ROAD_WIDTH:
+                if self.turn_dist < intersect_dist and self.turn_dist+(abs(self.x_vel)+abs(self.y_vel)) > intersect_dist:
                     self.y_vel = abs(self.x_vel)
                     self.x_vel = 0
                     self.turn_inbound = False
@@ -159,7 +177,7 @@ class Car:
                     self.go_forward()
 
             elif dir == "R":
-                if self.turn_dist < ROAD_WIDTH and self.turn_dist+(abs(self.x_vel)+abs(self.y_vel)) > ROAD_WIDTH:
+                if self.turn_dist < intersect_dist and self.turn_dist+(abs(self.x_vel)+abs(self.y_vel)) > intersect_dist:
                     self.x_vel = abs(self.y_vel)
                     self.y_vel = 0
                     self.turn_inbound = False
@@ -222,6 +240,7 @@ class Car:
                 self.turn_inbound = True
                 self.turn_direction = turn
                 self.start_dist = True
+                self.current_dir = loc[1]
                 return True
             return False
 
@@ -454,6 +473,11 @@ def check_changelights(event):
     if event.key == pygame.K_SPACE:
         pressed = 1
         print("Space Pressed")
+    elif event.key == pygame.K_t:
+        for light_obj in System.TrafficLights:
+            if random.randint(1,2) == 1:
+                light_obj.toggle_signal()
+                
     elif pressed == 1:
         if event.key in [pygame.K_u, pygame.K_l, pygame.K_c, pygame.K_r, pygame.K_d]:
             toggle_key_press()
@@ -518,7 +542,7 @@ while running:
             if event.key == pygame.K_a:
                 add_car()
             give_velocity()
-        
+
     update_cars()
     show_cars()
     
