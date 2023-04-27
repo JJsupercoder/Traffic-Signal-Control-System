@@ -31,8 +31,6 @@ class System:
     trafficlightVar = -1 # temp variable to keep count of traffic light
     Cars = []
     cars = 1 # No. of cars on the road
-    # max_cars = 25
-    # total_cars = 0
 
 
 class TrafficLight:
@@ -74,12 +72,17 @@ class Car:
             System.Cars.append(self)
 
     def draw(self):
-        #####-------------------------------------------#####
-        # Convert this into a small circle of radius 7 or 8 #
-        #####-------------------------------------------#####
-        #car = pygame.Rect(self.position[0], self.position[1], self.car_dimensions[0], self.car_dimensions[1])
-        #pygame.draw.rect(win, BLUE, car)
         pygame.draw.circle(win, BLUE, (self.position[0], self.position[1]),  (ROAD_WIDTH/8))
+    
+    def turn_right(self):
+        if (self.velocity[0] == 0):
+            while(self.velocity[1]>0):
+                self.velocity[0] += 0.1
+                self.velocity[1] -= 0.1
+        elif (self.velocity[1] == 0):
+            while(self.velocity[0]>0):
+                self.velocity[0] -= 0.1
+                self.velocity[1] += 0.1 
         
 
 
@@ -170,7 +173,8 @@ def initialVelocity(spawnPosition):
     spawnPosition_4=[15 , 585]
     #a = random.randint(1, 3)
     a = 2
-    # speed of 3 is too fast for the code to pause and wait for the program to see if it is okay to cross
+    # speed of 3 is too fast for the code to pause and wait for the program to see if it 
+    # is okay to cross
     initVelocity_1=[a , 0]
     initVelocity_2=[0 , a]
     initVelocity_3=[a*-1 , 0]
@@ -222,93 +226,107 @@ def collision_detection():
     pass
 # detect traffic light
 def traffic_light_detection():
+    a = random.randint(1, 2)
     for car_obj in System.Cars:
         for light_obj in System.TrafficLights:
             # cars moving along the x-axis
             if (car_obj.position[0] == ((WIDTH/2-0.75*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)) and (car_obj.position[1] == (ROAD_WIDTH/4)):
                 if (light_obj.srNo == 4):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
+                        car_obj.velocity = [0, 0]
                     if (light_obj.color == GREEN):
-                        car_obj.velocity[0] = 1
-                        car_obj.velocity[1] = 0
+                        car_obj.velocity = [a, 0] 
             elif (car_obj.position[0] == ((WIDTH/2-0.75*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)) and (car_obj.position[1] == ((HEIGHT/2) - (ROAD_WIDTH/4))):
                 if (light_obj.srNo == 1):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [a, 0] 
             elif (car_obj.position[0] == ((WIDTH-1.25*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)) and (car_obj.position[1] == (HEIGHT/2-0.25*ROAD_WIDTH)):
                 if (light_obj.srNo == 9):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [a, 0] 
             elif (car_obj.position[0] == ((WIDTH/2-0.75*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)) and (car_obj.position[1] == (HEIGHT-0.75*ROAD_WIDTH)):
                 if (light_obj.srNo == 11):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [a, 0] 
             elif (car_obj.position[0] == ((WIDTH/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)) and (car_obj.position[1] == (ROAD_WIDTH*0.75)):
                 if (light_obj.srNo == 5):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [a, 0] 
             elif (car_obj.position[0] == ((WIDTH/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)) and (car_obj.position[1] == (HEIGHT/2+0.25*ROAD_WIDTH)):
                 if (light_obj.srNo == 3):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [a, 0] 
             elif (car_obj.position[0] == ((WIDTH/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)) and (car_obj.position[1] == (HEIGHT-0.25*ROAD_WIDTH)):
                 if (light_obj.srNo == 10):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [a, 0] 
             elif (car_obj.position[0] == ((ROAD_WIDTH*1.25) + (ROAD_WIDTH/4) + 15)) and (car_obj.position[1] == (HEIGHT/2+0.25*ROAD_WIDTH)):
                 if (light_obj.srNo == 15):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [a, 0] 
             # cars moving along the y-axis
-            elif (car_obj.position[0] == ((WIDTH/2-0.75*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)) and (car_obj.position[1] == (ROAD_WIDTH/4)):
-                if (light_obj.srNo == 4):
+            elif (car_obj.position[0] == (WIDTH/2-0.25*ROAD_WIDTH)) and (car_obj.position[1] == ((5*ROAD_WIDTH/4) + (ROAD_WIDTH/4) + 15)):
+                if (light_obj.srNo == 6):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
-            elif (car_obj.position[0] == ((WIDTH/2-0.75*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)) and (car_obj.position[1] == ((HEIGHT/2) - (ROAD_WIDTH/4))):
-                if (light_obj.srNo == 1):
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [0, a] 
+            elif (car_obj.position[0] == (ROAD_WIDTH*0.75)) and (car_obj.position[1] == ((HEIGHT/2-0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) - 15)):
+                if (light_obj.srNo == 14):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
-            elif (car_obj.position[0] == ((WIDTH-1.25*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)) and (car_obj.position[1] == (HEIGHT/2-0.25*ROAD_WIDTH)):
-                if (light_obj.srNo == 9):
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [0, a] 
+            elif (car_obj.position[0] == (WIDTH/2+0.25*ROAD_WIDTH)) and (car_obj.position[1] == ((HEIGHT/2-0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) - 15)):
+                if (light_obj.srNo == 2):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
-            elif (car_obj.position[0] == ((WIDTH/2-0.75*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)) and (car_obj.position[1] == (HEIGHT-0.75*ROAD_WIDTH)):
-                if (light_obj.srNo == 11):
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [0, a] 
+            elif (car_obj.position[0] == (WIDTH-0.25*ROAD_WIDTH)) and (car_obj.position[1] == ((HEIGHT/2-0.75*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)):
+                if (light_obj.srNo == 7):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
-            elif (car_obj.position[0] == ((WIDTH/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)) and (car_obj.position[1] == (ROAD_WIDTH*0.75)):
-                if (light_obj.srNo == 5):
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [0, a] 
+            elif (car_obj.position[0] == (ROAD_WIDTH*0.25)) and (car_obj.position[1] == ((HEIGHT/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)):
+                if (light_obj.srNo == 13):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
-            elif (car_obj.position[0] == ((WIDTH/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)) and (car_obj.position[1] == (HEIGHT/2+0.25*ROAD_WIDTH)):
-                if (light_obj.srNo == 3):
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [0, a] 
+            elif (car_obj.position[0] == (WIDTH/2-0.25*ROAD_WIDTH)) and (car_obj.position[1] == ((HEIGHT/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)):
+                if (light_obj.srNo == 0):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
-            elif (car_obj.position[0] == ((WIDTH/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)) and (car_obj.position[1] == (HEIGHT-0.25*ROAD_WIDTH)):
-                if (light_obj.srNo == 10):
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [0, a] 
+            elif (car_obj.position[0] == (WIDTH-0.75*ROAD_WIDTH)) and (car_obj.position[1] == ((HEIGHT/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)):
+                if (light_obj.srNo == 8):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
-            elif (car_obj.position[0] == ((ROAD_WIDTH*1.25) + (ROAD_WIDTH/4) + 15)) and (car_obj.position[1] == (HEIGHT/2+0.25*ROAD_WIDTH)):
-                if (light_obj.srNo == 15):
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [0, a] 
+            elif (car_obj.position[0] == (WIDTH/2+0.25*ROAD_WIDTH)) and (car_obj.position[1] == ((HEIGHT-1.25*ROAD_WIDTH) + (ROAD_WIDTH/4) - 15)):
+                if (light_obj.srNo == 12):
                     if (light_obj.color == RED):
-                        car_obj.velocity[0] = 0
-                        car_obj.velocity[1] = 0
+                        car_obj.velocity = [0, 0]
+                    if (light_obj.color == GREEN):
+                        car_obj.velocity = [0, a] 
             
 # automated movement
 def automated_movement():
@@ -377,7 +395,6 @@ while running:
     move_cars()
     pygame.display.update()
     pygame.display.flip()
-
 
 pygame.quit()
 sys.exit()
