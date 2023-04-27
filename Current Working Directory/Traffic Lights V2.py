@@ -8,6 +8,8 @@ pygame.init()
 WIDTH = 800
 HEIGHT = 600
 win = pygame.display.set_mode((WIDTH, HEIGHT))
+timer = pygame.time.Clock()
+fps = 60
 pygame.display.set_caption("Traffic Control Environment")
 
 # define colors
@@ -28,13 +30,12 @@ INTERSECTION_SIZE = 100
 class System:
     TrafficLights = []
     Cars = []
-    max_cars = 50
+    max_cars = 5
     total_cars = 0
-    obstacles = []
 
     @staticmethod
-    def add_car(car_obj):
-        System.Cars.append(car_obj)
+    def add_car(self):
+        System.Cars.append(self)
         System.total_cars += 1
 
 
@@ -88,6 +89,7 @@ class Car:
 
         global win
         pygame.draw.rect(win, self.col, pygame.Rect(self.x, self.y, self.length, self.breadth))
+        #pygame.draw.circle(win, BLUE, (self.x,self.y), (ROAD_WIDTH/4))
         # pygame.display.update()
         # add logic to avoid same place spawning.
         if self not in System.Cars:
@@ -105,9 +107,6 @@ class Car:
                 self.y_vel *= random.choice(speed_choice)
 
 
-    def draw(self):
-        pass
-
     def update_pos(self):
         self.x += self.x_vel
         self.y += self.y_vel
@@ -121,29 +120,143 @@ class Car:
             self.change_speed()
 
     def check_intersection(self):
-        pass
+        for light_obj in System.TrafficLights:
+            # cars moving along the x-axis
+            if (self.x == ((WIDTH/2-0.75*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)) and (self.y == (ROAD_WIDTH/4)):
+                if (light_obj.loc == 'UR'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed() 
+            elif (self.x == ((WIDTH/2-0.75*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)) and (self.y == ((HEIGHT/2) - (ROAD_WIDTH/4))):
+                if (light_obj.loc == 'CR'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            elif (self.x == ((WIDTH-1.25*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)) and (self.y == (HEIGHT/2-0.25*ROAD_WIDTH)):
+                if (light_obj.loc == 'RR'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            elif (self.x == ((WIDTH/2-0.75*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)) and (self.y == (HEIGHT-0.75*ROAD_WIDTH)):
+                if (light_obj.loc == 'DR'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            elif (self.x == ((WIDTH/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)) and (self.y == (ROAD_WIDTH*0.75)):
+                if (light_obj.loc == 'UL'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            elif (self.x == ((WIDTH/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)) and (self.y == (HEIGHT/2+0.25*ROAD_WIDTH)):
+                if (light_obj.loc == 'CL'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            elif (self.x == ((WIDTH/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)) and (self.y == (HEIGHT-0.25*ROAD_WIDTH)):
+                if (light_obj.loc == 'DL'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            elif (self.x == ((ROAD_WIDTH*1.25) + (ROAD_WIDTH/4) + 15)) and (self.y == (HEIGHT/2+0.25*ROAD_WIDTH)):
+                if (light_obj.loc == 'LL'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            # cars moving along the y-axis
+            elif (self.x == (WIDTH/2-0.25*ROAD_WIDTH)) and (self.y == ((5*ROAD_WIDTH/4) + (ROAD_WIDTH/4) + 15)):
+                if (light_obj.loc == 'UU'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            elif (self.x == (ROAD_WIDTH*0.75)) and (self.y == ((HEIGHT/2-0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) - 15)):
+                if (light_obj.loc == 'LD'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            elif (self.x == (WIDTH/2+0.25*ROAD_WIDTH)) and (self.y == ((HEIGHT/2-0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) - 15)):
+                if (light_obj.loc == 'CD'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            elif (self.x == (WIDTH-0.25*ROAD_WIDTH)) and (self.y == ((HEIGHT/2-0.75*ROAD_WIDTH) - (ROAD_WIDTH/4) - 15)):
+                if (light_obj.loc =='RD'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            elif (self.x == (ROAD_WIDTH*0.25)) and (self.y == ((HEIGHT/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)):
+                if (light_obj.loc == 'LU'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            elif (self.x == (WIDTH/2-0.25*ROAD_WIDTH)) and (self.y == ((HEIGHT/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)):
+                if (light_obj.loc == 'CU'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            elif (self.x == (WIDTH-0.75*ROAD_WIDTH)) and (self.y == ((HEIGHT/2+0.75*ROAD_WIDTH) + (ROAD_WIDTH/4) + 15)):
+                if (light_obj.loc == 'RU'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
+            elif (self.x == (WIDTH/2+0.25*ROAD_WIDTH)) and (self.y == ((HEIGHT-1.25*ROAD_WIDTH) + (ROAD_WIDTH/4) - 15)):
+                if (light_obj.loc == 'DD'):
+                    if (light_obj.col == RED):
+                        self.x_vel = 0
+                        self.y_vel = 0
+                    if (light_obj.col == GREEN):
+                        self.change_speed()
 
 # create traffic signals
-    TrafficLight(x=(WIDTH/2-0.75*ROAD_WIDTH), y=(ROAD_WIDTH/4), loc='UR')
-    TrafficLight(x=(WIDTH/2+0.75*ROAD_WIDTH), y=(ROAD_WIDTH*0.75), loc='UL')
-    TrafficLight(x=(WIDTH/2-0.25*ROAD_WIDTH), y=(5*ROAD_WIDTH/4), loc='UU')
+TrafficLight(x=(WIDTH/2-0.75*ROAD_WIDTH), y=(ROAD_WIDTH/4), loc='UR')
+TrafficLight(x=(WIDTH/2+0.75*ROAD_WIDTH), y=(ROAD_WIDTH*0.75), loc='UL')
+TrafficLight(x=(WIDTH/2-0.25*ROAD_WIDTH), y=(5*ROAD_WIDTH/4), loc='UU')
 
-    TrafficLight(x=(WIDTH-0.25*ROAD_WIDTH), y=(HEIGHT/2-0.75*ROAD_WIDTH), loc='RD')
-    TrafficLight(x=(WIDTH-1.25*ROAD_WIDTH), y=(HEIGHT/2-0.25*ROAD_WIDTH), loc='RR')
-    TrafficLight(x=(WIDTH-0.75*ROAD_WIDTH), y=(HEIGHT/2+0.75*ROAD_WIDTH), loc='RU')
+TrafficLight(x=(WIDTH-0.25*ROAD_WIDTH), y=(HEIGHT/2-0.75*ROAD_WIDTH), loc='RD')
+TrafficLight(x=(WIDTH-1.25*ROAD_WIDTH), y=(HEIGHT/2-0.25*ROAD_WIDTH), loc='RR')
+TrafficLight(x=(WIDTH-0.75*ROAD_WIDTH), y=(HEIGHT/2+0.75*ROAD_WIDTH), loc='RU')
 
-    TrafficLight(x=(WIDTH/2+0.75*ROAD_WIDTH), y=(HEIGHT-0.25*ROAD_WIDTH), loc='DL')
-    TrafficLight(x=(WIDTH/2+0.25*ROAD_WIDTH), y=(HEIGHT-1.25*ROAD_WIDTH), loc='DD')
-    TrafficLight(x=(WIDTH/2-0.75*ROAD_WIDTH), y=(HEIGHT-0.75*ROAD_WIDTH), loc='DR')
+TrafficLight(x=(WIDTH/2+0.75*ROAD_WIDTH), y=(HEIGHT-0.25*ROAD_WIDTH), loc='DL')
+TrafficLight(x=(WIDTH/2+0.25*ROAD_WIDTH), y=(HEIGHT-1.25*ROAD_WIDTH), loc='DD')
+TrafficLight(x=(WIDTH/2-0.75*ROAD_WIDTH), y=(HEIGHT-0.75*ROAD_WIDTH), loc='DR')
 
-    TrafficLight(x=(ROAD_WIDTH*0.25), y=(HEIGHT/2+0.75*ROAD_WIDTH), loc='LU')
-    TrafficLight(x=(ROAD_WIDTH*0.75), y=(HEIGHT/2-0.75*ROAD_WIDTH), loc='LD')
-    TrafficLight(x=(ROAD_WIDTH*1.25), y=(HEIGHT/2+0.25*ROAD_WIDTH), loc='LL')
+TrafficLight(x=(ROAD_WIDTH*0.25), y=(HEIGHT/2+0.75*ROAD_WIDTH), loc='LU')
+TrafficLight(x=(ROAD_WIDTH*0.75), y=(HEIGHT/2-0.75*ROAD_WIDTH), loc='LD')
+TrafficLight(x=(ROAD_WIDTH*1.25), y=(HEIGHT/2+0.25*ROAD_WIDTH), loc='LL')
 
-    TrafficLight(x=(WIDTH/2-0.25*ROAD_WIDTH), y=(HEIGHT/2+0.75*ROAD_WIDTH), loc='CU')
-    TrafficLight(x=(WIDTH/2-0.75*ROAD_WIDTH), y=((HEIGHT/2) - (ROAD_WIDTH/4)), loc='CR')
-    TrafficLight(x=(WIDTH/2+0.75*ROAD_WIDTH), y=(HEIGHT/2+0.25*ROAD_WIDTH), loc='CL')
-    TrafficLight(x=(WIDTH/2+0.25*ROAD_WIDTH), y=(HEIGHT/2-0.75*ROAD_WIDTH), loc='CD')
+TrafficLight(x=(WIDTH/2-0.25*ROAD_WIDTH), y=(HEIGHT/2+0.75*ROAD_WIDTH), loc='CU')
+TrafficLight(x=(WIDTH/2-0.75*ROAD_WIDTH), y=((HEIGHT/2) - (ROAD_WIDTH/4)), loc='CR')
+TrafficLight(x=(WIDTH/2+0.75*ROAD_WIDTH), y=(HEIGHT/2+0.25*ROAD_WIDTH), loc='CL')
+TrafficLight(x=(WIDTH/2+0.25*ROAD_WIDTH), y=(HEIGHT/2-0.75*ROAD_WIDTH), loc='CD')
 
 
 # create obstacles
@@ -201,48 +314,36 @@ def update_cars():
     for car in System.Cars:
         car.update_pos()
 
-        # # to come back to init pos
-        # if car.x > win.get_width():
-        #     car.x = car.init_x 
-        # if car.y > win.get_height():
-        #     car.y = car.init_y
-        # if car.x < 0:
-        #     car.x = car.init_x
-        # if car.y < 0:
-        #     car.y = car.init_y
-
 
 def add_car():
-    if System.total_cars < System.max_cars: # if cars dont exceed the max no
-        # creating random pos for the car
-        possible_locs = ['UU','UR','UL','LU','LL','LD','CU','CL','CR','CD','RU','RR','RD','DL','DR','DD']
-        init_x_vel = 0.1
-        init_y_vel = 0.1
-        init_speed = [(0,-init_y_vel),(init_x_vel,0),(-init_x_vel,0),(0,-init_y_vel),(-init_x_vel,0),(0,init_y_vel),(0,-init_y_vel),(-init_x_vel,0),(init_x_vel,0),(0,init_y_vel),(0,-init_y_vel),(init_x_vel,0),(0,init_y_vel),(-init_x_vel,0),(init_x_vel,0),(0,init_y_vel)]
-        loc_pos = random.randint(0,len(possible_locs)-1)
-        loc_select = possible_locs[loc_pos]
-        x_vel, y_vel = init_speed[loc_pos]
-        spawn_locs = {
-            'UR': ((ROAD_WIDTH*1.25),(ROAD_WIDTH/4)-ROAD_WIDTH/8),
-            'UL': ((WIDTH-1.25*ROAD_WIDTH),(ROAD_WIDTH*0.75)-ROAD_WIDTH/8),
-            'UU': ((WIDTH/2-0.25*ROAD_WIDTH)-ROAD_WIDTH/8,(HEIGHT/2-0.75*ROAD_WIDTH)),
-            'RD': ((WIDTH-0.25*ROAD_WIDTH)-ROAD_WIDTH/8,(5*ROAD_WIDTH/4)),
-            'RR': ((WIDTH/2+0.75*ROAD_WIDTH),(HEIGHT/2-0.25*ROAD_WIDTH)-ROAD_WIDTH/8),
-            'RU': ((WIDTH-0.75*ROAD_WIDTH)-ROAD_WIDTH/8,(HEIGHT-1.25*ROAD_WIDTH)),
-            'DL': ((WIDTH-1.25*ROAD_WIDTH),(HEIGHT-0.25*ROAD_WIDTH)-ROAD_WIDTH/8),
-            'DD': ((WIDTH/2+0.25*ROAD_WIDTH)-ROAD_WIDTH/8,(HEIGHT/2+0.75*ROAD_WIDTH)),
-            'DR': ((ROAD_WIDTH*1.25),(HEIGHT-0.75*ROAD_WIDTH)-ROAD_WIDTH/8),
-            'LU': ((ROAD_WIDTH*0.25)-ROAD_WIDTH/8,(HEIGHT-1.25*ROAD_WIDTH)),
-            'LD': ((ROAD_WIDTH*0.75)-ROAD_WIDTH/8,(5*ROAD_WIDTH/4)),
-            'LL': ((WIDTH/2-0.75*ROAD_WIDTH),(HEIGHT/2+0.25*ROAD_WIDTH)-ROAD_WIDTH/8),
-            'CU': ((WIDTH/2-0.25*ROAD_WIDTH)-ROAD_WIDTH/8,(HEIGHT-1.25*ROAD_WIDTH)),
-            'CR': ((ROAD_WIDTH*1.25),((HEIGHT/2) - (ROAD_WIDTH/4))-ROAD_WIDTH/8),
-            'CL': ((WIDTH-1.25*ROAD_WIDTH),(HEIGHT/2+0.25*ROAD_WIDTH)-ROAD_WIDTH/8),
-            'CD': ((WIDTH/2+0.25*ROAD_WIDTH)-ROAD_WIDTH/8,(5*ROAD_WIDTH/4))
-        }
-        x,y = spawn_locs[loc_select]
+    possible_locs = ['UU','UR','UL','LU','LL','LD','CU','CL','CR','CD','RU','RR','RD','DL','DR','DD']
+    init_x_vel = 0.1
+    init_y_vel = 0.1
+    init_speed = [(0,-init_y_vel),(init_x_vel,0),(-init_x_vel,0),(0,-init_y_vel),(-init_x_vel,0),(0,init_y_vel),(0,-init_y_vel),(-init_x_vel,0),(init_x_vel,0),(0,init_y_vel),(0,-init_y_vel),(init_x_vel,0),(0,init_y_vel),(-init_x_vel,0),(init_x_vel,0),(0,init_y_vel)]
+    loc_pos = random.randint(0,len(possible_locs)-1)
+    loc_select = possible_locs[loc_pos]
+    x_vel, y_vel = init_speed[loc_pos]
+    spawn_locs = {
+        'UR': ((ROAD_WIDTH*1.25),(ROAD_WIDTH/4)-ROAD_WIDTH/8),
+        'UL': ((WIDTH-1.25*ROAD_WIDTH),(ROAD_WIDTH*0.75)-ROAD_WIDTH/8),
+        'UU': ((WIDTH/2-0.25*ROAD_WIDTH)-ROAD_WIDTH/8,(HEIGHT/2-0.75*ROAD_WIDTH)),
+        'RD': ((WIDTH-0.25*ROAD_WIDTH)-ROAD_WIDTH/8,(5*ROAD_WIDTH/4)),
+        'RR': ((WIDTH/2+0.75*ROAD_WIDTH),(HEIGHT/2-0.25*ROAD_WIDTH)-ROAD_WIDTH/8),
+        'RU': ((WIDTH-0.75*ROAD_WIDTH)-ROAD_WIDTH/8,(HEIGHT-1.25*ROAD_WIDTH)),
+        'DL': ((WIDTH-1.25*ROAD_WIDTH),(HEIGHT-0.25*ROAD_WIDTH)-ROAD_WIDTH/8),
+        'DD': ((WIDTH/2+0.25*ROAD_WIDTH)-ROAD_WIDTH/8,(HEIGHT/2+0.75*ROAD_WIDTH)),
+        'DR': ((ROAD_WIDTH*1.25),(HEIGHT-0.75*ROAD_WIDTH)-ROAD_WIDTH/8),
+        'LU': ((ROAD_WIDTH*0.25)-ROAD_WIDTH/8,(HEIGHT-1.25*ROAD_WIDTH)),
+        'LD': ((ROAD_WIDTH*0.75)-ROAD_WIDTH/8,(5*ROAD_WIDTH/4)),
+        'LL': ((WIDTH/2-0.75*ROAD_WIDTH),(HEIGHT/2+0.25*ROAD_WIDTH)-ROAD_WIDTH/8),
+        'CU': ((WIDTH/2-0.25*ROAD_WIDTH)-ROAD_WIDTH/8,(HEIGHT-1.25*ROAD_WIDTH)),
+        'CR': ((ROAD_WIDTH*1.25),((HEIGHT/2) - (ROAD_WIDTH/4))-ROAD_WIDTH/8),
+        'CL': ((WIDTH-1.25*ROAD_WIDTH),(HEIGHT/2+0.25*ROAD_WIDTH)-ROAD_WIDTH/8),
+        'CD': ((WIDTH/2+0.25*ROAD_WIDTH)-ROAD_WIDTH/8,(5*ROAD_WIDTH/4))
+    }
+    x,y = spawn_locs[loc_select]
         # add while loop to avoid same loc spawn 
-        car1 = Car(x,y,x_vel,y_vel)
+    car1 = Car(x,y,x_vel,y_vel)
 
 
 def check_changelights(event):
@@ -299,14 +400,15 @@ class Obstacle:
         self.x2 = x2
         self.y1 = y1
         self.y2 = y2
-        
 
 running = True
 while running:
     draw_environment()
     show_cars()
-    add_car() # remove?
+    #add_car()
     for event in pygame.event.get():
+        for car_obj in System.Cars:
+            car_obj.check_intersection()
         if event.type == pygame.QUIT:
             running = False
         elif event.type == pygame.KEYDOWN:
@@ -324,9 +426,3 @@ while running:
 
 pygame.quit()
 sys.exit()
-
-
-
-            
-                
-            
