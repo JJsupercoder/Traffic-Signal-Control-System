@@ -21,6 +21,7 @@ BLACK = (0, 0, 0)
 WHITE = (255, 255, 255)
 GREY = (128, 128, 128)
 GREEN = (0, 255, 0)
+DGREEN = (0, 100, 0)
 RED = (255, 0, 0)
 YELLOW = (255, 255, 0)
 BLUE = (0, 0, 255)
@@ -539,10 +540,10 @@ def draw_environment():
     pygame.draw.line(win, WHITE, ((WIDTH/2),((HEIGHT+ROAD_WIDTH)/2)), ((WIDTH/2),(HEIGHT-ROAD_WIDTH)))
     pygame.draw.line(win, WHITE, (((WIDTH+ROAD_WIDTH)/2),(HEIGHT/2)), ((WIDTH-ROAD_WIDTH),(HEIGHT/2)))
     # draw obstacles
-    pygame.draw.rect(win,GREEN, obstacle1)
-    pygame.draw.rect(win,GREEN, obstacle2)
-    pygame.draw.rect(win,GREEN, obstacle3)
-    pygame.draw.rect(win,GREEN, obstacle4)
+    pygame.draw.rect(win,DGREEN, obstacle1)
+    pygame.draw.rect(win,DGREEN, obstacle2)
+    pygame.draw.rect(win,DGREEN, obstacle3)
+    pygame.draw.rect(win,DGREEN, obstacle4)
 
     for light_obj in System.TrafficLights:
         light_obj.draw()
@@ -863,6 +864,4 @@ while running:
     
 pygame.quit()
 sys.exit()
-
-
 
