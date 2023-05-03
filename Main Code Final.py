@@ -1,6 +1,12 @@
 import pygame
 import sys
 import random
+import gym
+import numpy as np
+from gym import spaces
+from stable_baselines3 import DQN
+from stable_baselines3.common.env_util import make_vec_env
+import time
 
 pygame.init()
 
@@ -696,6 +702,73 @@ class BufferTime:
             return False
 
 
+class TrafficControlEnv(gym.Env):
+    def __init__(self):
+        # define the action space and observation space
+        self.action_space = spaces.Discrete(15)
+        self.observation_space = spaces.Box(low=0, high=100, shape=(16,), dtype=np.float32)
+        # initialize the traffic lights and waiting times
+        self.lights = [0] * 16
+        self.wait_times = [0] * 16
+
+    def step(self, action):
+        # convert action index to traffic light state
+        self.lights = [0] * 16
+        self.lights[action // 3 * 3 + action % 3] = 1
+        # set the traffic lights and wait for cars to move
+        t_lights = ["UU","UR","UL","LU","LL","LD","RU","RR","RD","DD","DR","DL","CU","CR","CL","CD"]
+        t_list = []
+        for i in range(len(self.lights)):
+            if i == 1:
+                t_list.append(t_lights[i])
+
+        turn_lights_green(t_list)
+        # time.sleep(0.5) # adjust this value according to how long it takes for cars to move
+        # get the new waiting times
+        self.wait_times = list(System.get_scores().values())
+        # calculate the reward
+        reward = -np.sum(self.wait_times)
+        # check if the episode is over
+        done = False
+        # return the new observation, reward, done flag, and info dictionary
+        return self.wait_times, reward, done, {}
+
+    def reset(self):
+        # reset the traffic lights and waiting times
+        System.Cars = []
+        for light in System.TrafficLights:
+            light.turn_red()
+        # time.sleep(0.5) # adjust this value according to how long it takes for cars to move
+        self.wait_times = list(System.get_scores().values())
+        # return the initial observation
+        return self.wait_times
+
+# create a vectorized environment
+env = make_vec_env(TrafficControlEnv, n_envs=4)
+
+# create a DQN agent
+model = DQN("MlpPolicy", env, verbose=1)
+
+# train the agent
+model.learn(total_timesteps=int(1e5))
+
+# save the agent
+model.save("traffic_control_model.zip")
+
+# evaluate the agent
+obs = env.reset()
+for i in range(100):
+    action, _states = model.predict(obs, deterministic=True)
+    signal_duration = np.random.choice([3, 4, 5]) # choose signal duration randomly
+    for j in range(signal_duration):
+        obs, rewards, dones, info = env.step(action)
+        env.render()
+        if dones[0]:
+            obs = env.reset()
+            break
+
+
+
 def agent_function():
     stop_u = s_u.check_buffer()
     stop_d = s_d.check_buffer()
@@ -790,3 +863,6 @@ while running:
     
 pygame.quit()
 sys.exit()
+
+
+
