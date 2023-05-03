@@ -15,44 +15,11 @@
 
 ## Documentation
 
-[Presentation](https://www.canva.com/design/DAFh0_-M5DE/N_SIVnf4luzizx4WF6pYOg/edit?utm_content=DAFh0_-M5DE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
-[Report](https://www.report.com/design/)
+- [Presentation](https://www.canva.com/design/DAFh0_-M5DE/N_SIVnf4luzizx4WF6pYOg/edit?utm_content=DAFh0_-M5DE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
 
 
-## Features
+- [Report](https://www.report.com/design/)
 
-- Light/dark mode toggle
-- Live previews
-- Fullscreen mode
-- Cross platform
+## Running The Program
 
-
-## Lessons Learned
-
-What did you learn while building this project? What challenges did you face and how did you overcome them?
-
-
-## Running Tests
-
-To run tests, run the following command
-
-```bash
-  npm run test
-```
-
-
-## Screenshots
-
-![App Screenshot](https://via.placeholder.com/468x300?text=App+Screenshot+Here)
-
-
-## Usage/Examples
-
-```javascript
-import Component from 'my-project'
-
-function App() {
-  return <Component />
-}
-```
-
+To run the program download the file "Main Code Final.py" and run the program in VSCode or other python ide capable of running pygame.
