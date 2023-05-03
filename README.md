@@ -3,7 +3,9 @@
 
 ## Tech Stack
 
-** Python **
+**Python**
+**Pygame**
+**Keras**
 
 ## Authors
 
@@ -13,7 +15,8 @@
 
 ## Documentation
 
-[Documentation](https://linktodocumentation)
+[Presentation](https://www.canva.com/design/DAFh0_-M5DE/N_SIVnf4luzizx4WF6pYOg/edit?utm_content=DAFh0_-M5DE&utm_campaign=designshare&utm_medium=link2&utm_source=sharebutton)
+[Report](https://www.report.com/design/)
 
 
 ## Features
