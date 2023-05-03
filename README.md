@@ -3,9 +3,9 @@
 
 ## Tech Stack
 
-**Python**
-**Pygame**
-**Keras**
+- **Python**
+- **Pygame**
+- **Keras**
 
 ## Authors
 
