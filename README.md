@@ -3,7 +3,7 @@
 ## Install these libraries
 - pip install pygame
 - pip install gym
-- pip install stable_baselines3
+- pip install stable-baselines3
 
 ## Tech Stack
 
