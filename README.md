@@ -1,9 +1,9 @@
 # Traffic Signal Control System
 
 ## Install these libraries
-pip install pygame
-pip install gym
-pip install stable_baselines3
+- pip install pygame
+- pip install gym
+- pip install stable_baselines3
 
 ## Tech Stack
 
